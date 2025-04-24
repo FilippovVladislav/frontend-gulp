@@ -3,23 +3,20 @@ import fileInclude from 'gulp-file-include';
 import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import { globby } from 'globby';
-import { createRequire } from 'module';
 import * as cheerio from 'cheerio';
-
-const require = createRequire(import.meta.url);
 
 // Пути к директориям
 const srcHtmlDir = 'src/html';
 const distHtmlDir = 'dist';
 
 // Задача для копирования HTML файлов с подстановками
-export async function copyHtml() {
+export function copyHtml() {
     return gulp.src(`${srcHtmlDir}/**/*.html`)
         .pipe(fileInclude({
             prefix: '@@',
-            basepath: '@file',
+            basepath: '@file',  // Убедитесь, что пути корректны
         }))
-        .pipe(gulp.dest(distHtmlDir));
+        .pipe(gulp.dest(distHtmlDir)); // Перезаписать файлы в dist
 }
 
 // Задача для замены <img> на <picture> с поддержкой WebP
