@@ -146,6 +146,6 @@ npm: 11.3.0
 If you like this project and would like to support its development, you can make a donation:
 
 - **Crypto Wallet**: TUMKgoGgtAPgrd7ra82RyeqyAipD1Aj16w
-  (BTC, ETH, or other coins)
+  Tether USD
 
 Thank you for your support! 🙏
