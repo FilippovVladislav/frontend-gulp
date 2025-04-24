@@ -8,13 +8,13 @@ import { initMarquee } from './library/marquee';
 import { modal } from './library/modal';
 
 document.addEventListener('DOMContentLoaded', () => {
-    lazyLoadMedia();
-    initSwiper();
-    initFancybox();
-    initNotyf();
-    initializeTabs();
-    initTooltip();
-    initMarquee();
-    modal;
+    // lazyLoadMedia();
+    // initSwiper();
+    // initFancybox();
+    // initNotyf();
+    // initializeTabs();
+    // initTooltip();
+    // initMarquee();
+    // modal;
 });
 
