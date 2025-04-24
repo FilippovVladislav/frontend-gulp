@@ -140,3 +140,12 @@ npm run clean:deps
 
 Node.js: v22.14.0
 npm: 11.3.0
+
+## Donate
+
+If you like this project and would like to support its development, you can make a donation:
+
+- **Crypto Wallet**: TUMKgoGgtAPgrd7ra82RyeqyAipD1Aj16w
+  (BTC, ETH, or other coins)
+
+Thank you for your support! 🙏
