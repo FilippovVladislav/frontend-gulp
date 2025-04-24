@@ -1,9 +1,19 @@
-<!-- Загружается сразу -->
+</body>
 <script src="js/start.js" type="module"></script>
 
 <!-- Загружается после полной загрузки страницы -->
 <script type="module">
     window.addEventListener('DOMContentLoaded', () => {
-        import('./js/main.js');
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                import('./js/main.js');
+            });
+        } else {
+            window.addEventListener('load', () => {
+                import('./js/main.js');
+            });
+        }
     });
 </script>
+
+</html>
