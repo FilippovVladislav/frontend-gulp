@@ -137,7 +137,7 @@ npm run test
 npm run clean:deps 
 ```
 
-# Используемые версии
+## Используемые версии
 
 Node.js: v22.14.0
 npm: 11.3.0
