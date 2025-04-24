@@ -1,6 +1,32 @@
+//иконки
 @use "components/icon";
-@use "components/tables";
+
+//таблицы
+//@use "components/tables";
+
+//копки
 @use "components/buttons";
-@use "components/animations";
-@use "components/modal";
-@use "library/notyf";
+
+//анимация
+//@use "components/animations";
+
+//модальные окна html/library/modal
+//@use "components/modal";
+
+//плагин уведомления
+//@use "library/notyf";
+
+//плагин фангсибох
+//@use "library/fancybox";
+
+//плагин беконечная прокрутка html/library/marquee
+//@use "library/marquee";
+
+//плагин слайдер
+//@use "library/swiper";
+
+//плагин табы html/library/tabs
+//@use "library/tabs";
+
+//плагин подсказки html/library/typpy
+//@use "library/typpy";
