@@ -141,6 +141,11 @@ npm run clean:deps
 Node.js: v22.14.0
 npm: 11.3.0
 
+## Contact Information
+
+- **Email**: [vlad.filippov.tmn@gmail.com](mailto:vlad.filippov.tmn@gmail.com)
+- **Telegram**: [@VladFilippov72](https://t.me/VladFilippov72)
+
 ## Donate
 
 If you like this project and would like to support its development, you can make a donation:
