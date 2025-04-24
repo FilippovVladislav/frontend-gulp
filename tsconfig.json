@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "jsx": "react"
+  },
+  "include": [
+    "src/**/*",           // Убедитесь, что папка src включена
+    "src/types/global.d.ts" // Указываем явный путь к глобальным типам, если это необходимо
+  ]
+}

@@ -1,0 +1,9 @@
+<!-- Загружается сразу -->
+<script src="js/start.js" type="module"></script>
+
+<!-- Загружается после полной загрузки страницы -->
+<script type="module">
+    window.addEventListener('DOMContentLoaded', () => {
+        import('./js/main.js');
+    });
+</script>

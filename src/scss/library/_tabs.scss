@@ -1,0 +1,25 @@
+.tabs__nav {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tabs__tab {
+  cursor: pointer;
+  padding: 10px;
+  margin-right: 5px;
+  background: #f1f1f1;
+}
+
+.tabs__tab.active {
+  background: #ddd;
+}
+
+.tabs__panel {
+  display: none;
+}
+
+.tabs__panel.active {
+  display: block;
+}

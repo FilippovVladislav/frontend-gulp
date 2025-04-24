@@ -1,0 +1,108 @@
+/* Сброс базовых стилей */
+
+/* Обнуляем отступы и поля у всех элементов */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Убираем стандартные стили у ссылок */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Убираем стили у списка */
+ul, ol {
+  list-style: none;
+}
+
+/* Убираем стили у таблиц */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Убираем обводку у элементов форм */
+input,
+textarea,
+button,
+select {
+  border: none;
+  outline: none;
+}
+
+/* Убираем стандартный стиль у кнопок */
+button {
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Убираем стандартные стили у блоков ввода */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+textarea {
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Убираем фон и стили у форм */
+form {
+  display: block;
+}
+
+/* Обнуляем отступы у элементов в инпуте */
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+/* Убираем стрелки у числовых инпутов */
+input[type="number"] {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+}
+
+/* Убираем стандартное поведение при выделении текста */
+::selection {
+  background-color: transparent;
+  color: inherit;
+}
+
+/* Сброс стилизации для всех изображений */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Убираем стандартные стили у блоков */
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Убираем фон у body */
+body {
+  background: none;
+}
+
+/* Убираем стили для iframe */
+iframe {
+  border: none;
+}
+
+/* Сброс маркеров у ссылок */
+a:focus,
+a:hover {
+  outline: none;
+}
+

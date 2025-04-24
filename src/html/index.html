@@ -1,0 +1,39 @@
+@@include('parts/head.html')
+<body>
+@@include('parts/header.html')
+иой новая тсраница
+<img src="images/caption.jpg" alt="" width="100" height="600">
+<img src="images/caption3.jpg" alt="" width="100" height="600" >
+<img src="images/caption4.jpg" alt="" width="100" height="600">
+<img src="images/caption5.jpg" alt="" width="100" height="600">
+<img src="images/caption6.jpg" alt="" width="100" height="600">
+<svg class="icon icon--red">
+    <use xlink:href="images/sprite.svg#icon-filter"></use>
+</svg>
+<!-- Кнопка для открытия модалки -->
+<button class="open-modal" data-modal="modal-1">Открыть модалку</button>
+
+<!-- Модалка -->
+<div class="modal" id="modal-1">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Заголовок модалки</h2>
+        <p>Это содержимое модалки. Вы можете добавить что угодно сюда.</p>
+    </div>
+</div>
+
+<!-- Кнопка для открытия модалки -->
+<button class="open-modal" data-modal="modal-2">Открыть модалку</button>
+
+<!-- Модалка -->
+<div class="modal" id="modal-2">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Заголовок модалки 2</h2>
+        <p>Это содержимое модалки. Вы можете добавить что угодно сюда.</p>
+    </div>
+</div>
+
+</body>
+@@include('parts/script.html')
+</html>
