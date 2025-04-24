@@ -11,7 +11,7 @@ const distHtmlDir = 'dist';
 
 // Задача для копирования HTML файлов с подстановками
 export function copyHtml() {
-    return gulp.src(`${srcHtmlDir}/**/*.html`)
+    return gulp.src(`${srcHtmlDir}/*.html`)
         .pipe(fileInclude({
             prefix: '@@',
             basepath: '@file',  // Убедитесь, что пути корректны
@@ -54,6 +54,20 @@ export function htmlWebpReplaceTask(done) {
 
                         $img.replaceWith(picture);
                     }
+                });
+
+                $('[style]').each((_, el) => {
+                    const $el = $(el);
+                    let style = $el.attr('style');
+
+                    // Поиск background-image с .jpg, .jpeg или .png
+                    const regex = /background-image\s*:\s*url\(["']?(.*?)\.(jpe?g|png)["']?\)/gi;
+
+                    style = style.replace(regex, (match, urlBase, ext) => {
+                        return `background-image: url("${urlBase}.webp")`;
+                    });
+
+                    $el.attr('style', style);
                 });
 
                 await writeFile(file, $.html(), 'utf-8');

@@ -16,6 +16,7 @@
     "@fancyapps/ui": "^5.0.36",
     "del": "^8.0.0",
     "esbuild": "^0.25.3",
+    "fluent-ffmpeg": "^2.1.3",
     "globby": "^14.1.0",
     "gulp-esbuild": "^0.14.0",
     "imagemin": "^9.0.1",
@@ -30,6 +31,7 @@
     "browser-sync": "^3.0.4",
     "cheerio": "^1.0.0",
     "cross-env": "^7.0.3",
+    "depcheck": "^1.4.7",
     "gulp": "^5.0.0",
     "gulp-cheerio": "^1.0.0",
     "gulp-clean-css": "^4.3.0",
@@ -45,7 +47,6 @@
     "imagemin-pngquant": "^10.0.0",
     "imagemin-svgo": "^11.0.1",
     "sass": "^1.86.3",
-    "through2": "^4.0.2",
-    "depcheck": "^1.4.7"
+    "through2": "^4.0.2"
   }
 }

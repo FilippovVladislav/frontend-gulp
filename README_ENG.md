@@ -1,13 +1,17 @@
 # frontend-gulp
 
-This project is for build automation using Gulp. The goal of the project is to simplify the development process by automating tasks such as Sass file compilation, CSS minification, image optimization, JavaScript bundling, SVG sprite creation, and more.
+This project is for build automation using Gulp. The goal of the project is to simplify the development process by
+automating tasks such as Sass file compilation, CSS minification, image optimization, JavaScript bundling, SVG sprite
+creation, and more.
 
 ## Dependencies
 
 ### Installed dependencies
+
 - **@fancyapps/ui**: A lightweight and modern plugin for displaying modals and lightboxes.
 - **del**: A utility for removing files and directories.
 - **esbuild**: A fast bundler and JavaScript minifier.
+- **fluent-ffmpeg** is used for compressing video files, converting formats, and other video and audio processing tasks.
 - **globby**: A library for working with file paths and patterns.
 - **gulp-esbuild**: A Gulp plugin to use esbuild for bundling and minifying JavaScript.
 - **imagemin**: A plugin for image optimization.
@@ -17,6 +21,7 @@ This project is for build automation using Gulp. The goal of the project is to s
 - **tippy.js**: A lightweight and customizable tooltip plugin.
 
 ### Зависимости для разработки
+
 - **@types/cheerio**: TypeScript types for the Cheerio library.
 - **@types/through2**: TypeScript types for the through2 library.
 - **browser-sync**: A tool for automatically reloading the page in the browser during development.
@@ -43,39 +48,60 @@ This project is for build automation using Gulp. The goal of the project is to s
 ## Gulp Tasks
 
 ### `cleanTask`
+
 This task cleans the output directories (e.g., dist/) before each build. It removes old and unnecessary files.
 
 ### `fontsTask`
+
 A task that copies font files from the src/fonts/ directory to the corresponding output directory (dist/fonts/).
 
 ### `sassTask`
+
 Compiles Sass files into CSS, minifies them, and generates source maps for debugging.
 
 ### `copyHtml`
+
 Copies HTML files from the src/html/ folder to the output directory (dist/).
 
 ### `htmlWebpReplaceTask`
+
 Replaces all images in HTML with <picture> elements, adding WebP images for modern browsers.
 
 ### `addPreloadToLCP`
-Adds <link rel="preload"> tags to the HTML for critical resources (such as images and fonts), improving the Largest Contentful Paint (LCP) metric.
+
+Adds <link rel="preload"> tags to the HTML for critical resources (such as images and fonts), improving the Largest
+Contentful Paint (LCP) metric.
 
 ### `optimizeImages`
+
 Optimizes images (JPG, PNG, GIF, SVG) using tools like imagemin.
 
 ### `convertToWebp`
+
 Converts supported image formats to the WebP format for better compression.
 
 ### `svgSpriteTask`
+
 Generates an SVG sprite from all SVG files in the src/images/icon/ directory.
 
 ### `jsTask`
+
 Bundles and minifies JavaScript files using esbuild. This task also generates source maps for debugging.
 
 ### `serveTask`
-Launches a local development server and serves files from the dist/ directory. It includes live reloading using BrowserSync.
+
+Launches a local development server and serves files from the dist/ directory. It includes live reloading using
+BrowserSync.
+
+### `videoTask`
+
+This task handles the compression of .mp4 video files using the fluent-ffmpeg library. All videos from the src/video/
+folder are processed, and if compression is successful, they are saved in the dist/video/ folder. In case of a
+compression error, the video file is copied without modifications. The task also watches for changes in video files and
+automatically processes any new or modified files.
 
 ### `reloadBrowser`
+
 Reloads the browser when files change during development.
 
 ## Usage
@@ -91,17 +117,21 @@ npm install
 ```bash
 npm run dev
 ```
+
 3. To build for production:
+
 ```bash
 npm run build
 ```
 
 4. To check the gulp tasks:
+
 ```bash
 npm run test 
 ```
 
 5. To remove unused dependencies:
+
 ```bash
 npm run clean:deps 
 ```

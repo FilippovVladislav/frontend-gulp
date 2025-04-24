@@ -8,7 +8,7 @@ import { initMarquee } from './library/marquee';
 import { modal } from './library/modal';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // lazyLoadMedia();
+    lazyLoadMedia();
     // initSwiper();
     // initFancybox();
     // initNotyf();
