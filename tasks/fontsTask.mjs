@@ -6,7 +6,7 @@ import { reloadBrowser } from './serveTask.mjs';
 
 const fontsDir = path.resolve('src/fonts');
 const distFontsDir = path.resolve('dist/fonts');
-const scssFile = path.resolve('src/scss/_fonts.scss');
+const scssFile = path.resolve('src/scss/base/_fonts.scss');
 
 function createFontsDir() {
     if (!fs.existsSync(distFontsDir)) {
