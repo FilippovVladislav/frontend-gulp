@@ -22,7 +22,6 @@ function createScssFile() {
 
 function getFontWeight(fontName) {
     const name = fontName.toLowerCase();
-    // Существующие правила для получения веса шрифта
     if (name.includes('extrabold') || name.includes('heavy')) return 800;
     if (name.includes('black')) return 900;
     if (name.includes('bold')) return 700;
@@ -54,15 +53,17 @@ export async function fontsTask() {
     createScssFile();
 
     const files = fs.readdirSync(fontsDir);
-    const fontFiles = files.filter(file => file.endsWith('.woff') || file.endsWith('.woff2'));
+    const fontFiles = files.filter(file => file.endsWith('.ttf'));
 
     if (fontFiles.length === 0) {
-        console.log('⚠️ Нет WOFF/WOFF2 файлов для обработки.');
+        console.log('⚠️ Нет TTF файлов для обработки.');
         return;
     }
 
     let scssContent = '';
     const addedFonts = new Set(); // Для отслеживания уникальных шрифтов
+
+    const ttf2woff2 = (await import('ttf2woff2')).default;
 
     const copyFontPromises = fontFiles.map((file) => {
         const fontPath = path.join(fontsDir, file);
@@ -79,15 +80,37 @@ export async function fontsTask() {
 
         addedFonts.add(fontKey); // Добавляем шрифт в набор с расширением
 
-        console.log(`🔧 Копируем: ${fontName} → ${baseFontName}, вес: ${fontWeight}, формат: ${path.extname(file)}`);
+        console.log(`🔧 Обрабатываем: ${fontName} → ${baseFontName}, вес: ${fontWeight}, формат: TTF`);
 
         return new Promise((resolve, reject) => {
+            // Копируем .ttf файл
             gulp.src(fontPath)
                 .pipe(gulp.dest(distFontsDir))
-                .on('end', resolve)
+                .on('end', () => {
+                    console.log(`✅ Шрифт ${fontName}.ttf скопирован`);
+
+                    // Конвертируем .ttf в .woff
+                    gulp.src(fontPath)
+                        .pipe(rename({ extname: '.woff' }))
+                        .pipe(gulp.dest(distFontsDir))
+                        .on('end', () => {
+                            console.log(`✅ Шрифт ${fontName}.woff скопирован`);
+
+                            // Конвертируем .ttf в .woff2
+                            const woff2Buffer = ttf2woff2(fs.readFileSync(fontPath));
+                            fs.writeFileSync(path.join(distFontsDir, `${fontName}.woff2`), woff2Buffer);
+                            console.log(`✅ Шрифт ${fontName}.woff2 скопирован`);
+
+                            resolve();
+                        })
+                        .on('error', (err) => {
+                            console.error(`Ошибка при конвертации ${fontName}.woff:`, err);
+                            reject(err);
+                        });
+                })
                 .on('error', (err) => {
-                    console.error(`Ошибка при копировании ${file}:`, err);
-                    reject(err); // Отказ при ошибке
+                    console.error(`Ошибка при конвертации ${fontName}.ttf:`, err);
+                    reject(err);
                 });
         }).then(() => {
             // SCSS
@@ -114,6 +137,6 @@ export async function fontsTask() {
     fs.writeFileSync(scssFile, scssContent, 'utf8');
     removeTTFfromDist();
 
-    console.log('✅ Шрифты скопированы и SCSS файл обновлён');
+    console.log('✅ Шрифты сконвертированы и SCSS файл обновлён');
     reloadBrowser(); // Перезагружаем браузер после обработки
 }
