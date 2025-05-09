@@ -13,12 +13,12 @@ import { compressAndCopyVideos } from './tasks/videoTask.mjs'; // Импорти
 function watchFiles() {
     watch('src/scss/**/*.scss', series(sassTask, reloadBrowser));
     watch('src/html/**/*.html', series(copyHtml, htmlWebpReplaceTask, addPreloadToLCP, reloadBrowser));
-    watch('src/images/**/*.{jpg,jpeg,png,svg,gif,ico}', series(copyImages, reloadBrowser));
+    watch('src/images/**/*.{jpg,jpeg,png}', series(copyImages, convertToWebp, reloadBrowser)); // <-- Обновили
+    watch('src/images/**/*.svg', series(copyImages, reloadBrowser));
     watch('src/images/icon/**/*.svg', svgSpriteTask);
     watch(['src/js/**/*.ts', 'src/js/**/*.tsx'], series(jsTask, reloadBrowser));
-    watch('src/video/**/*.mp4', series(compressAndCopyVideos)); // Добавляем задачу для видео
+    watch('src/video/**/*.mp4', series(compressAndCopyVideos));
 }
-
 // Задача для разработки
 export const dev = series(
     cleanTask,
