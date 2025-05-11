@@ -5,6 +5,9 @@ import cleanCSS from 'gulp-clean-css';
 import rename from 'gulp-rename';
 import plumber from 'gulp-plumber';
 import sourcemaps from 'gulp-sourcemaps';
+import postcss from 'gulp-postcss';
+import autoprefixer from 'autoprefixer';
+import postcssPxtorem from 'postcss-pxtorem';
 import { reloadBrowser } from './serveTask.mjs'; // Импортируем reloadBrowser
 
 // Создаем связку для использования dart-sass через gulp-sass
@@ -25,6 +28,15 @@ export function sassTask() {
             .pipe(plumber())
             .pipe(sourcemaps.init())
             .pipe(sass().on('error', sass.logError)) // Компиляция Sass с выводом ошибок
+            .pipe(postcss([
+                autoprefixer(),
+                postcssPxtorem({
+                    rootValue: 16,
+                    propList: ['*'],
+                    mediaQuery: false,
+                    minPixelValue: 1,
+                }),
+            ]))
             .pipe(cleanCSS())
             .pipe(rename('critical.css'))
             .pipe(sourcemaps.write('.'))
