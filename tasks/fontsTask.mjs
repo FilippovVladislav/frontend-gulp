@@ -24,8 +24,9 @@ function getFontWeight(fontName) {
     const name = fontName.toLowerCase();
     if (name.includes('extrabold') || name.includes('heavy')) return 800;
     if (name.includes('black')) return 900;
-    if (name.includes('bold')) return 700;
     if (name.includes('semibold') || name.includes('demibold')) return 600;
+    if (name.includes('bold')) return 700;
+
     if (name.includes('medium')) return 500;
     if (name.includes('regular') || name.includes('normal')) return 400;
     if (name.includes('light')) return 300;
@@ -116,8 +117,8 @@ export async function fontsTask() {
             // SCSS
             const fontFace = `@font-face {\n` +
                 `  font-family: '${baseFontName}';\n` +
-                `  src: url('../fonts/${fontName}.woff2') format('woff2'),\n` +
-                `       url('../fonts/${fontName}.woff') format('woff');\n` +
+                `  src: url('fonts/${fontName}.woff2') format('woff2'),\n` +
+                `       url('fonts/${fontName}.woff') format('woff');\n` +
                 `  font-weight: ${fontWeight};\n` +
                 `  font-style: normal;\n` +
                 `  font-display: swap;\n` +

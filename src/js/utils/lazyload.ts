@@ -2,19 +2,28 @@ export function lazyLoadMedia() {
     const lazyImages = document.querySelectorAll<HTMLImageElement>("img.lazy-img");
     const lazySources = document.querySelectorAll<HTMLSourceElement>("source[data-srcset]");
     const lazyVideos = document.querySelectorAll<HTMLVideoElement>("video.lazy-video");
+    const lazyBackgrounds = document.querySelectorAll<HTMLElement>("[data-bg]"); // Добавляем поиск элементов с data-bg
     const lcpElement = document.querySelector<HTMLElement>('.lcp-element');  // Добавляем поиск LCP-элемента
+
+    // Функция для выбора правильного изображения из массива
+    const getBgImage = (dataBg: string) => {
+        const bgImages = dataBg.split(',').map(image => image.trim());  // Разбиваем строку на массив путей
+        const windowWidth = window.innerWidth;
+        // Если ширина экрана меньше 991px, выбираем мобильное изображение
+        return windowWidth < 991 ? bgImages[1] : bgImages[0];
+    };
 
     if ("IntersectionObserver" in window) {
         const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    // Обработка изображений
                     const picture = entry.target.closest("picture");
                     if (picture) {
                         const img = picture.querySelector("img.lazy-img") as HTMLImageElement;
                         const sources = picture.querySelectorAll("source[data-srcset]");
 
                         sources.forEach((source) => {
-                            // Приводим source к типу HTMLSourceElement
                             const htmlSource = source as HTMLSourceElement;
                             htmlSource.srcset = htmlSource.dataset.srcset || "";
                             htmlSource.removeAttribute("data-srcset");
@@ -24,6 +33,9 @@ export function lazyLoadMedia() {
                             img.src = img.dataset.src;
                             img.removeAttribute("data-src");
                             img.classList.remove("lazy-img");
+                            img.onload = () => {
+                                img.style.opacity = '1';  // Устанавливаем opacity после загрузки
+                            };
                         }
 
                         if (img) observer.unobserve(img);
@@ -45,6 +57,15 @@ export function lazyLoadMedia() {
                         video.classList.remove("lazy-video");
                         observer.unobserve(video);
                     }
+
+                    // Обработка фонов (data-bg)
+                    const bgElement = entry.target as HTMLElement;
+                    if (bgElement && bgElement.dataset.bg) {
+                        const bgImage = getBgImage(bgElement.dataset.bg);  // Получаем правильное изображение для фона
+                        bgElement.style.backgroundImage = `url(${bgImage})`;
+                        bgElement.removeAttribute("data-bg");
+                        observer.unobserve(bgElement);
+                    }
                 }
             });
         });
@@ -54,6 +75,9 @@ export function lazyLoadMedia() {
 
         // Наблюдение за видео
         lazyVideos.forEach(video => observer.observe(video));
+
+        // Наблюдение за фоновыми изображениями
+        lazyBackgrounds.forEach(el => observer.observe(el));
 
         // Предзагрузка LCP элемента, если он найден
         if (lcpElement && lcpElement.tagName === 'IMG') {
@@ -79,7 +103,6 @@ export function lazyLoadMedia() {
         });
 
         lazySources.forEach((source) => {
-            // Приводим source к типу HTMLSourceElement
             const htmlSource = source as HTMLSourceElement;
             htmlSource.srcset = htmlSource.dataset.srcset || "";
             htmlSource.removeAttribute("data-srcset");

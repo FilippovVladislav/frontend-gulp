@@ -6,8 +6,7 @@ import rename from 'gulp-rename';
 import plumber from 'gulp-plumber';
 import sourcemaps from 'gulp-sourcemaps';
 import postcss from 'gulp-postcss';
-import autoprefixer from 'autoprefixer';
-import postcssPxtorem from 'postcss-pxtorem';
+import pxtorem from 'postcss-pxtorem';
 import { reloadBrowser } from './serveTask.mjs'; // Импортируем reloadBrowser
 
 // Создаем связку для использования dart-sass через gulp-sass
@@ -22,32 +21,35 @@ const paths = {
     js: 'src/js/**/*.ts'
 };
 
+const postcssPlugins = [
+    pxtorem({
+        rootValue: 16,         // базовый размер шрифта
+        propList: ['*'],       // преобразовывать все свойства
+        mediaQuery: false,     // не преобразовывать внутри @media
+        minPixelValue: 1       // минимальное значение для преобразования
+    })
+];
+
 export function sassTask() {
     const compileCritical = () => {
         return src(paths.critical)
             .pipe(plumber())
             .pipe(sourcemaps.init())
             .pipe(sass().on('error', sass.logError)) // Компиляция Sass с выводом ошибок
-            .pipe(postcss([
-                autoprefixer(),
-                postcssPxtorem({
-                    rootValue: 16,
-                    propList: ['*'],
-                    mediaQuery: false,
-                    minPixelValue: 1,
-                }),
-            ]))
+            .pipe(postcss(postcssPlugins))
             .pipe(cleanCSS())
             .pipe(rename('critical.css'))
             .pipe(sourcemaps.write('.'))
             .pipe(dest(paths.output));
     };
 
+
     const compileAsync = () => {
         return src(paths.async)
             .pipe(plumber())
             .pipe(sourcemaps.init())
             .pipe(sass().on('error', sass.logError)) // Компиляция Sass с выводом ошибок
+            .pipe(postcss(postcssPlugins))
             .pipe(cleanCSS())
             .pipe(rename('async.css'))
             .pipe(sourcemaps.write('.'))

@@ -1,6 +1,12 @@
 import { watch, series, parallel } from 'gulp';
 import { sassTask } from './tasks/sassTask.mjs';
-import { copyHtml, htmlWebpReplaceTask, addPreloadToLCP } from './tasks/htmlTask.mjs';
+import {
+    copyHtml,
+    htmlWebpReplaceTask,
+    addPreloadToLCP,
+    addPreloadFonts,
+    addCriticalCssToHead
+} from './tasks/htmlTask.mjs';
 import { serveTask, reloadBrowser } from './tasks/serveTask.mjs';
 import { fontsTask } from './tasks/fontsTask.mjs';
 import { cleanTask } from './tasks/cleanTask.mjs';
@@ -19,6 +25,7 @@ function watchFiles() {
     watch(['src/js/**/*.ts', 'src/js/**/*.tsx'], series(jsTask, reloadBrowser));
     watch('src/video/**/*.mp4', series(compressAndCopyVideos));
 }
+
 // Задача для разработки
 export const dev = series(
     cleanTask,
@@ -54,5 +61,7 @@ export const build = series(
     ),
     compressAndCopyVideos, // Добавляем обработку видео
     htmlWebpReplaceTask, // Заменяем изображения на <picture> после обработки
-    addPreloadToLCP // Добавляем предзагрузку для LCP-элементов
+    addPreloadToLCP, // Добавляем предзагрузку для LCP-элементов
+    addPreloadFonts,
+    addCriticalCssToHead
 );

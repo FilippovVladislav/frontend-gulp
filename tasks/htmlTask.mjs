@@ -29,12 +29,13 @@ export function htmlWebpReplaceTask(done) {
                 const html = await readFile(file, 'utf-8');
                 const $ = cheerio.load(html);
 
+                // Заменяем обычные изображения на <picture> с WebP
                 $('img').each((_, img) => {
                     const $img = $(img);
-                    const src = $img.attr('src');
+                    let src = $img.attr('src');
 
                     if (src && /\.(jpe?g|png)$/i.test(src)) {
-                        const webpSrc = src.replace(/\.(jpe?g|png)$/i, '.webp');
+                        const webpSrc = src.replace(/\.(jpe?g|png)$/i, '.webp');  // Меняем на .webp
                         const fileName = path.basename(src, path.extname(src));
                         const alt = $img.attr('alt') || fileName;
 
@@ -47,15 +48,16 @@ export function htmlWebpReplaceTask(done) {
                         const heightText = height ? ` height="${height}"` : '';
 
                         const picture = `
-<picture ${widthText}${heightText}>
+<picture>
   <source data-srcset="${webpSrc}" type="image/webp">
-  <img data-src="${src}" alt="${alt}" class="lazy-img"${classText}${widthText}${heightText}>
+  <img data-src="${src}" alt="${alt}" class="lazy-img"${classText}${widthText}${heightText} loading="lazy">
 </picture>`;
 
                         $img.replaceWith(picture);
                     }
                 });
 
+                // Заменяем фоновое изображение с .jpg/.png на data-bg и загружаем через JS
                 $('[style]').each((_, el) => {
                     const $el = $(el);
                     let style = $el.attr('style');
@@ -64,9 +66,13 @@ export function htmlWebpReplaceTask(done) {
                     const regex = /background-image\s*:\s*url\(["']?(.*?)\.(jpe?g|png)["']?\)/gi;
 
                     style = style.replace(regex, (match, urlBase, ext) => {
-                        return `background-image: url("${urlBase}.webp")`;
+                        // Меняем на .webp для всех форматов .jpg/.png
+                        const bgImages = `${urlBase}.webp, ${urlBase}-mobile.webp`; // Мобильный вариант добавлен
+                        $el.attr('data-bg', bgImages); // Заменяем на data-bg с .webp
+                        return style; // Оставляем оригинальный стиль без background-image
                     });
 
+                    // Обновляем стиль
                     $el.attr('style', style);
                 });
 
@@ -80,6 +86,9 @@ export function htmlWebpReplaceTask(done) {
         }
     })();
 }
+
+
+
 
 // Задача для добавления предзагрузки изображений
 export function addPreloadToLCP(done) {
@@ -116,9 +125,82 @@ export function addPreloadToLCP(done) {
     })();
 }
 
+// Задача для добавления предзагрузки шрифтов
+export function addPreloadFonts(done) {
+    (async () => {
+        try {
+            // Путь к папке с шрифтами
+            const fontsDir = path.join(distHtmlDir, 'fonts');
+
+            // Получаем все файлы шрифтов в папке dist/fonts
+            const fontFiles = await globby(['**/*.{woff,woff2,ttf,otf}'], { cwd: fontsDir });
+
+            // Получаем все HTML файлы в папке dist
+            const files = await globby(['**/*.html'], { cwd: distHtmlDir, absolute: true });
+
+            for (const file of files) {
+                const html = await readFile(file, 'utf-8');
+                const $ = cheerio.load(html);
+
+                // Для каждого шрифта из папки dist/fonts добавляем тег <link rel="preload">
+                fontFiles.forEach(fontFile => {
+                    const fontUrl = `fonts/${fontFile}`;
+                    const fontType = path.extname(fontFile).toLowerCase();
+
+                    // Добавляем тег <link rel="preload"> для предзагрузки шрифта
+                    $('head').append(`<link rel="preload" href="${fontUrl}" as="font" type="font/${fontType}" crossorigin="anonymous">`);
+                });
+
+                // Перезаписываем изменённый файл HTML
+                await writeFile(file, $.html(), 'utf-8');
+            }
+
+            done(); // Завершаем задачу
+        } catch (err) {
+            console.error('Error in addPreloadFonts:', err);
+            done(err); // Завершаем задачу с ошибкой
+        }
+    })();
+}
+
+// Задача для добавления критичных стилей прямо в head
+export function addCriticalCssToHead(done) {
+    (async () => {
+        try {
+            const files = await globby(['**/*.html'], { cwd: distHtmlDir, absolute: true });
+            const criticalCssPath = path.join('dist', 'css', 'critical.css');  // Путь к скомпилированному critical.css
+            let criticalCss = await readFile(criticalCssPath, 'utf-8');  // Чтение содержимого CSS
+
+            // Удаляем пути с "../"
+            criticalCss = criticalCss.replace(/url\(["']?\.\.\/[^"']+["']?\)/g, match => {
+                return match.replace('../', ''); // Убираем "../" из пути
+            });
+
+            for (const file of files) {
+                const html = await readFile(file, 'utf-8');
+                const $ = cheerio.load(html);
+
+                $('link[href="css/critical.css"]').remove();
+
+                // Вставляем критичные стили в head
+                $('head').append(`<style>${criticalCss}</style>`);
+
+                await writeFile(file, $.html(), 'utf-8');
+            }
+
+            done(); // Завершаем задачу
+        } catch (err) {
+            console.error('Error in addCriticalCssToHead:', err);
+            done(err); // Завершаем задачу с ошибкой
+        }
+    })();
+}
+
 // Основная Gulp задача для всех этапов
 export const build = gulp.series(
     copyHtml,
     htmlWebpReplaceTask,
-    addPreloadToLCP
+    addPreloadToLCP,
+    addPreloadFonts,
+    addCriticalCssToHead
 );
