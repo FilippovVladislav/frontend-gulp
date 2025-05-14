@@ -117,8 +117,8 @@ export async function fontsTask() {
             // SCSS
             const fontFace = `@font-face {\n` +
                 `  font-family: '${baseFontName}';\n` +
-                `  src: url('fonts/${fontName}.woff2') format('woff2'),\n` +
-                `       url('fonts/${fontName}.woff') format('woff');\n` +
+                `  src: url('../fonts/${fontName}.woff2') format('woff2'),\n` +
+                `       url('../fonts/${fontName}.woff') format('woff');\n` +
                 `  font-weight: ${fontWeight};\n` +
                 `  font-style: normal;\n` +
                 `  font-display: swap;\n` +

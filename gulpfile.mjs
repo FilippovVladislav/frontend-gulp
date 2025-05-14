@@ -1,5 +1,6 @@
 import { watch, series, parallel } from 'gulp';
 import { sassTask } from './tasks/sassTask.mjs';
+import { copyFilesTask } from './tasks/copyFilesTask.mjs';
 import {
     copyHtml,
     htmlWebpReplaceTask,
@@ -23,6 +24,7 @@ function watchFiles() {
     watch('src/images/**/*.svg', series(copyImages, reloadBrowser));
     watch('src/images/icon/**/*.svg', svgSpriteTask);
     watch(['src/js/**/*.ts', 'src/js/**/*.tsx'], series(jsTask, reloadBrowser));
+    watch('src/files/**/*', copyFilesTask);
     watch('src/video/**/*.mp4', series(compressAndCopyVideos));
 }
 
@@ -34,6 +36,7 @@ export const dev = series(
         sassTask,
         copyHtml,
         jsTask,
+        copyFilesTask,
         async () => {
             await optimizeImages();
             await convertToWebp();
@@ -53,6 +56,7 @@ export const build = series(
         sassTask,
         copyHtml,
         jsTask,
+        copyFilesTask,
         async () => {
             await optimizeImages();
             await convertToWebp();
