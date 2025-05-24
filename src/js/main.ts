@@ -7,7 +7,7 @@ import { initTooltip } from './library/typpy';
 import { initMarquee } from './library/marquee';
 import { modal } from './library/modal';
 import { initAccordion } from './library/accordion';
-
+/*import 'dragscroll';*/
 document.addEventListener('DOMContentLoaded', () => {
     lazyLoadMedia();
     //initAccordion();
