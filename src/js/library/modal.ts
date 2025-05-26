@@ -1,26 +1,34 @@
-// modal.ts
-
 class Modal {
     private modals: NodeListOf<HTMLElement>;
     private openButtons: NodeListOf<HTMLElement>;
     private closeButtons: NodeListOf<HTMLElement>;
+    private closeButtons2: NodeListOf<HTMLElement>;
 
     constructor() {
         this.modals = document.querySelectorAll('.modal');
         this.openButtons = document.querySelectorAll('.open-modal');
         this.closeButtons = document.querySelectorAll('.close-modal');
+        this.closeButtons2 = document.querySelectorAll('.close-modal-button');
 
-        // Инициализация
         this._init();
     }
 
     private _init(): void {
-        // Открытие модалки по кнопке
+        // Обработка кнопок открытия модалок
         this.openButtons.forEach((button: HTMLElement) => {
             button.addEventListener('click', (e: Event) => {
                 const modalId = (button as HTMLElement).getAttribute('data-modal');
                 if (modalId) {
-                    this.open(modalId);
+                    // Если кнопка находится внутри модалки, закрыть текущую
+                    const currentModal = (button.closest('.modal') as HTMLElement);
+                    if (currentModal && currentModal.classList.contains('show')) {
+                        this.close();
+                    }
+
+                    // Немного подождать, чтобы избежать конфликта с анимациями
+                    setTimeout(() => {
+                        this.open(modalId);
+                    }, 10);
                 }
             });
         });
@@ -32,7 +40,13 @@ class Modal {
             });
         });
 
-        // Закрытие модалки по клику вне нее
+        this.closeButtons2.forEach((button: HTMLElement) => {
+            button.addEventListener('click', () => {
+                this.close();
+            });
+        });
+
+        // Закрытие при клике вне содержимого
         this.modals.forEach((modal: HTMLElement) => {
             modal.addEventListener('click', (e: MouseEvent) => {
                 if (e.target === modal) {
@@ -41,7 +55,7 @@ class Modal {
             });
         });
 
-        // Закрытие модалки по нажатию клавиши Escape
+        // Закрытие по клавише Escape
         document.addEventListener('keydown', (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
                 this.close();
@@ -49,7 +63,6 @@ class Modal {
         });
     }
 
-    // Открытие модалки по ID
     public open(modalId: string): void {
         const modal = document.getElementById(modalId);
         if (modal) {
@@ -57,7 +70,6 @@ class Modal {
         }
     }
 
-    // Закрытие всех модалок
     public close(): void {
         this.modals.forEach((modal: HTMLElement) => {
             modal.classList.remove('show');
@@ -65,7 +77,4 @@ class Modal {
     }
 }
 
-// Экспортируем модалку для использования в других частях приложения
 export const modal = new Modal();
-
-
